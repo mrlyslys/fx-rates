@@ -2,23 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>法币对稳定币汇率</title>
 <style>
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f5f7fa;color:#333}
-  header{background:#001529;color:#fff;padding:12px 20px;font-size:20px;font-weight:600}
-  select{font-size:14px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:4px}
-  .form-box{padding:15px 20px;background:#fff;border-bottom:1px solid #e8e8e8}
-  ul{list-style:none;padding:0;margin:20px}
-  li{padding:6px 0;border-bottom:1px solid #eee}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:1rem}
+  header{background:#001529;color:#fff;padding:1rem 0;width:100%;text-align:center;font-size:1.6rem;font-weight:600}
+  .form-box{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem 1rem;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);width:100%;max-width:400px;margin-top:1rem}
+  select{width:100%;font-size:1.2rem;padding:.8rem;border:1px solid #d9d9d9;border-radius:8px;text-align:center}
+  ul{width:100%;max-width:400px;margin-top:1rem}
+  li{background:#fff;border-radius:8px;margin:.5rem 0;padding:1rem;font-size:1.2rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 </style>
 </head>
 <body>
 <header>法币对稳定币汇率</header>
 
 <div class="form-box">
-  <label for="currency">选择法币：</label>
-  <select id="currency">
-      <option value="cny">CNY（人民币）</option>
+  <label for="currency" style="font-size:1.2rem;font-weight:600">选择法币：</label>
+  <select id="currency" onchange="loadRates(this.value)">
+<option value="cny">CNY（人民币）</option>
       <option value="hkd">HKD（港元）</option>
       <option value="tzs">TZS（坦桑尼亚先令）</option>
       <option value="usd">USD（美元）</option>
@@ -169,9 +171,9 @@ const $ = s => document.querySelector(s);
 
 async function loadRates(code) {
   const codeUpper = code.toUpperCase();
-  const resultEl = $('#result');
-  resultEl.innerHTML = '加载中…';
+  $('#result').innerHTML = '<li style="text-align:center">加载中…</li>';
 
+  // 直接拼接正确 URL（已修复）
   const urls = [
     `https://api.coinbase.com/v2/prices/${codeUpper}-USD/spot`,
     `https://api.coinbase.com/v2/prices/${codeUpper}-USDT/spot`,
@@ -181,21 +183,19 @@ async function loadRates(code) {
 
   try {
     const dataList = await Promise.all(urls.map(u => fetch(u).then(r => r.json())));
-    resultEl.innerHTML = '';
+    $('#result').innerHTML = '';
     dataList.forEach((d, i) => {
-      // 保留 5 位有效数字
       const val = Number(d.data.amount).toPrecision(5);
       const li = document.createElement('li');
       li.textContent = `${codeUpper} → ${names[i]}：${val}`;
-      resultEl.appendChild(li);
+      $('#result').appendChild(li);
     });
   } catch (err) {
-    resultEl.innerHTML = '<li>获取汇率失败，请稍后重试。</li>';
+    $('#result').innerHTML = '<li style="text-align:center">获取汇率失败，请检查网络或稍后重试。</li>';
   }
 }
 
-$('#currency').addEventListener('change', e => loadRates(e.target.value));
-loadRates('cny'); // 首次加载
+loadRates('cny'); // 初始加载
 </script>
 </body>
 </html>
