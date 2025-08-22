@@ -3,26 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>法币汇率</title>
+<title>FX Rate Pro</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:1rem}
-  header{background:#001529;color:#fff;padding:1rem 0;width:100%;text-align:center;font-size:1.6rem;font-weight:600}
-  .form-box{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem 1rem;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);width:100%;max-width:400px;margin-top:1rem}
-  select{width:100%;font-size:1.2rem;padding:.8rem;border:1px solid #d9d9d9;border-radius:8px;text-align:center}
-  ul{width:100%;max-width:400px;margin-top:1rem}
-  li{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;margin:.5rem 0;padding:1rem;font-size:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-  li span:last-child{font-family:monospace;text-align:right;width:40%}
+
+  :root{
+    --bg:#0d1117;
+    --card:#161b22;
+    --glass:rgba(255,255,255,.08);
+    --accent:#00f5ff;
+    --text:#f0f6fc;
+  }
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;min-height:100vh}
+  header{width:100%;padding:1.2rem 0;text-align:center;font-size:1.6rem;font-weight:800;background:linear-gradient(90deg,#00f5ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .form-box{display:flex;flex-direction:column;align-items:center;margin:1rem 0}
+select{
+  width:260px;
+  font-size:1.1rem;
+  padding:.75rem;
+  border:none;
+  border-radius:12px;
+  background:var(--glass);
+  backdrop-filter:blur(8px);
+  color:#00aaff;        /* ← 蓝色字体 */
+  outline:2px solid var(--accent);
+  outline-offset:-2px;
+  cursor:pointer;
+}
+  .spinner{margin:.5rem 0;width:20px;height:20px;border:2px solid var(--accent);border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .grid{display:grid;gap:1rem;padding:0 1rem 2rem;width:100%;max-width:600px}
+  .card{display:flex;justify-content:space-between;align-items:center;padding:1rem;border-radius:16px;background:var(--card);box-shadow:0 4px 18px rgba(0,0,0,.35);backdrop-filter:blur(12px)}
+  .pair{font-size:1.1rem}
+  .rate{font-family:'JetBrains Mono',monospace;font-size:1.2rem;color:var(--accent)}
+  @media(max-width:480px){header{font-size:1.3rem}select{width:90%}.rate{font-size:1rem}}
 </style>
 </head>
 <body>
-<header>法币汇率</header>
+
+<header><i class="fas fa-chart-line"></i> FX Rate Pro</header>
 
 <div class="form-box">
-  <label for="currency" style="font-size:1.2rem;font-weight:600">选择法币：</label>
   <select id="currency" onchange="loadRates(this.value)">
-    <!-- 精简：只留几个常用 -->
-<option value="cny">CNY（人民币）</option>
+    <option value="cny">CNY（人民币）</option>
       <option value="hkd">HKD（港元）</option>
       <option value="tzs">TZS（坦桑尼亚先令）</option>
       <option value="usd">USD（美元）</option>
@@ -164,39 +187,35 @@
       <option value="zmw">ZMW（赞比亚克瓦查）</option>
       <option value="zwl">ZWL（津巴布韦元）</option>
   </select>
+  <div class="spinner" id="spinner" style="display:none"></div>
 </div>
 
-<ul id="result"></ul>
+<div class="grid" id="grid"></div>
 
 <script>
 const $ = s => document.querySelector(s);
-
-async function loadRates(code) {
+function card(pair,rate){
+  return `<div class="card"><span class="pair">${pair}</span><span class="rate">${rate}</span></div>`;
+}
+async function loadRates(code){
   const codeUpper = code.toUpperCase();
-  $('#result').innerHTML = '<li style="text-align:center">加载中…</li>';
-
+  $('#spinner').style.display = 'inline-block';
   const urls = [
     `https://api.coinbase.com/v2/prices/${codeUpper}-USD/spot`,
     `https://api.coinbase.com/v2/prices/${codeUpper}-USDT/spot`,
     `https://api.coinbase.com/v2/prices/${codeUpper}-USDC/spot`
   ];
-  const names = ['USD', 'USDT', 'USDC'];
-
-  try {
-    const dataList = await Promise.all(urls.map(u => fetch(u).then(r => r.json())));
-    $('#result').innerHTML = '';
-    dataList.forEach((d, i) => {
-      const val = Number(d.data.amount).toPrecision(5);
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${codeUpper} → ${names[i]}</span><span>${val}</span>`;
-      $('#result').appendChild(li);
-    });
-  } catch (err) {
-    $('#result').innerHTML = '<li style="text-align:center">获取汇率失败，请稍后重试。</li>';
+  try{
+    const data = await Promise.all(urls.map(u=>fetch(u).then(r=>r.json())));
+    $('#grid').innerHTML = data.map((d,i)=>card(`${codeUpper} → ${['USD','USDT','USDC'][i]}`,Number(d.data.amount).toPrecision(5))).join('');
+  }catch(err){
+    $('#grid').innerHTML='<div class="card"><span>加载失败</span><span>请稍后重试</span></div>';
+  }finally{
+    $('#spinner').style.display='none';
   }
 }
-
 loadRates('cny');
 </script>
+
 </body>
 </html>
