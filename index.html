@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>法币对稳定币汇率</title>
+<title>法币汇率</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:1rem}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:1rem}
   header{background:#001529;color:#fff;padding:1rem 0;width:100%;text-align:center;font-size:1.6rem;font-weight:600}
   .form-box{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem 1rem;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);width:100%;max-width:400px;margin-top:1rem}
   select{width:100%;font-size:1.2rem;padding:.8rem;border:1px solid #d9d9d9;border-radius:8px;text-align:center}
   ul{width:100%;max-width:400px;margin-top:1rem}
-  li{background:#fff;border-radius:8px;margin:.5rem 0;padding:1rem;font-size:1.2rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  li{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;margin:.5rem 0;padding:1rem;font-size:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  li span:last-child{font-family:monospace;text-align:right;width:40%}
 </style>
 </head>
 <body>
-<header>法币对稳定币汇率</header>
+<header>法币汇率</header>
 
 <div class="form-box">
   <label for="currency" style="font-size:1.2rem;font-weight:600">选择法币：</label>
   <select id="currency" onchange="loadRates(this.value)">
+    <!-- 精简：只留几个常用 -->
 <option value="cny">CNY（人民币）</option>
       <option value="hkd">HKD（港元）</option>
       <option value="tzs">TZS（坦桑尼亚先令）</option>
@@ -173,7 +175,6 @@ async function loadRates(code) {
   const codeUpper = code.toUpperCase();
   $('#result').innerHTML = '<li style="text-align:center">加载中…</li>';
 
-  // 直接拼接正确 URL（已修复）
   const urls = [
     `https://api.coinbase.com/v2/prices/${codeUpper}-USD/spot`,
     `https://api.coinbase.com/v2/prices/${codeUpper}-USDT/spot`,
@@ -187,15 +188,15 @@ async function loadRates(code) {
     dataList.forEach((d, i) => {
       const val = Number(d.data.amount).toPrecision(5);
       const li = document.createElement('li');
-      li.textContent = `${codeUpper} → ${names[i]}：${val}`;
+      li.innerHTML = `<span>${codeUpper} → ${names[i]}</span><span>${val}</span>`;
       $('#result').appendChild(li);
     });
   } catch (err) {
-    $('#result').innerHTML = '<li style="text-align:center">获取汇率失败，请检查网络或稍后重试。</li>';
+    $('#result').innerHTML = '<li style="text-align:center">获取汇率失败，请稍后重试。</li>';
   }
 }
 
-loadRates('cny'); // 初始加载
+loadRates('cny');
 </script>
 </body>
 </html>
