@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>法币对稳定币汇率</title>
+<style>
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f5f7fa;color:#333}
+  header{background:#001529;color:#fff;padding:12px 20px;font-size:20px;font-weight:600}
+  select{font-size:14px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:4px}
+  .form-box{padding:15px 20px;background:#fff;border-bottom:1px solid #e8e8e8}
+  ul{list-style:none;padding:0;margin:20px}
+  li{padding:6px 0;border-bottom:1px solid #eee}
+</style>
+</head>
+<body>
+<header>法币对稳定币汇率</header>
+
+<div class="form-box">
+  <label for="currency">选择法币：</label>
+  <select id="currency">
+      <option value="cny">CNY（人民币）</option>
+      <option value="hkd">HKD（港元）</option>
+      <option value="tzs">TZS（坦桑尼亚先令）</option>
+      <option value="usd">USD（美元）</option>
+      <option value="lak">LAK（老挝基普）</option>
+      <option value="idr">IDR（印尼盾）</option>
+      <option value="myr">MYR（马来西亚林吉特）</option>
+      <option value="aed">AED（阿联酋迪拉姆）</option>
+      <option value="afn">AFN（阿富汗尼）</option>
+      <option value="amd">AMD（亚美尼亚德拉姆）</option>
+      <option value="ars">ARS（阿根廷比索）</option>
+      <option value="aud">AUD（澳元）</option>
+      <option value="azn">AZN（阿塞拜疆马纳特）</option>
+      <option value="bdt">BDT（孟加拉塔卡）</option>
+      <option value="bhd">BHD（巴林第纳尔）</option>
+      <option value="bif">BIF（布隆迪法郎）</option>
+      <option value="bmd">BMD（百慕大元）</option>
+      <option value="bnd">BND（文莱元）</option>
+      <option value="bob">BOB（玻利维亚诺）</option>
+      <option value="brl">BRL（巴西雷亚尔）</option>
+      <option value="bsd">BSD（巴哈马元）</option>
+      <option value="bwp">BWP（博茨瓦纳普拉）</option>
+      <option value="byn">BYN（白俄罗斯卢布）</option>
+      <option value="cad">CAD（加元）</option>
+      <option value="chf">CHF（瑞士法郎）</option>
+      <option value="clp">CLP（智利比索）</option>
+      <option value="cny">CNY（人民币）</option>
+      <option value="cop">COP（哥伦比亚比索）</option>
+      <option value="crc">CRC（哥斯达黎加科朗）</option>
+      <option value="cup">CUP（古巴比索）</option>
+      <option value="cve">CVE（佛得角埃斯库多）</option>
+      <option value="czk">CZK（捷克克朗）</option>
+      <option value="djf">DJF（吉布提法郎）</option>
+      <option value="dop">DOP（多米尼加比索）</option>
+      <option value="dzd">DZD（阿尔及利亚第纳尔）</option>
+      <option value="egp">EGP（埃及镑）</option>
+      <option value="ern">ERN（厄立特里亚纳克法）</option>
+      <option value="etb">ETB（埃塞俄比亚比尔）</option>
+      <option value="eur">EUR（欧元）</option>
+      <option value="fjd">FJD（斐济元）</option>
+      <option value="gbp">GBP（英镑）</option>
+      <option value="gel">GEL（格鲁吉亚拉里）</option>
+      <option value="ghs">GHS（加纳塞地）</option>
+      <option value="gmd">GMD（冈比亚达拉西）</option>
+      <option value="gnf">GNF（几内亚法郎）</option>
+      <option value="gtq">GTQ（危地马拉格查尔）</option>
+      <option value="hkd">HKD（港元）</option>
+      <option value="hnl">HNL（洪都拉斯伦皮拉）</option>
+      <option value="hrk">HRK（克罗地亚库纳）</option>
+      <option value="huf">HUF（匈牙利福林）</option>
+      <option value="idr">IDR（印尼盾）</option>
+      <option value="ils">ILS（以色列新谢克尔）</option>
+      <option value="inr">INR（印度卢比）</option>
+      <option value="iqd">IQD（伊拉克第纳尔）</option>
+      <option value="irr">IRR（伊朗里亚尔）</option>
+      <option value="isk">ISK（冰岛克朗）</option>
+      <option value="jmd">JMD（牙买加元）</option>
+      <option value="jod">JOD（约旦第纳尔）</option>
+      <option value="jpy">JPY（日元）</option>
+      <option value="kes">KES（肯尼亚先令）</option>
+      <option value="kgs">KGS（吉尔吉斯斯坦索姆）</option>
+      <option value="khr">KHR（柬埔寨瑞尔）</option>
+      <option value="krw">KRW（韩元）</option>
+      <option value="kwd">KWD（科威特第纳尔）</option>
+      <option value="kyd">KYD（开曼群岛元）</option>
+      <option value="kzt">KZT（哈萨克斯坦坚戈）</option>
+      <option value="lbp">LBP（黎巴嫩镑）</option>
+      <option value="lkr">LKR（斯里兰卡卢比）</option>
+      <option value="lyd">LYD（利比亚第纳尔）</option>
+      <option value="mad">MAD（摩洛哥迪拉姆）</option>
+      <option value="mdl">MDL（摩尔多瓦列伊）</option>
+      <option value="mga">MGA（马达加斯加阿里亚里）</option>
+      <option value="mkd">MKD（北马其顿第纳尔）</option>
+      <option value="mmk">MMK（缅甸缅元）</option>
+      <option value="mnt">MNT（蒙古图格里克）</option>
+      <option value="mop">MOP（澳门元）</option>
+      <option value="mru">MRU（毛里塔尼亚乌吉亚）</option>
+      <option value="mur">MUR（毛里求斯卢比）</option>
+      <option value="mvr">MVR（马尔代夫拉菲亚）</option>
+      <option value="mwk">MWK（马拉维克瓦查）</option>
+      <option value="mxn">MXN（墨西哥比索）</option>
+      <option value="myr">MYR（马来西亚林吉特）</option>
+      <option value="mzn">MZN（莫桑比克梅蒂卡尔）</option>
+      <option value="nad">NAD（纳米比亚元）</option>
+      <option value="ngn">NGN（尼日利亚奈拉）</option>
+      <option value="nio">NIO（尼加拉瓜科多巴）</option>
+      <option value="nok">NOK（挪威克朗）</option>
+      <option value="npr">NPR（尼泊尔卢比）</option>
+      <option value="nzd">NZD（新西兰元）</option>
+      <option value="omr">OMR（阿曼里亚尔）</option>
+      <option value="pen">PEN（秘鲁索尔）</option>
+      <option value="pgk">PGK（巴布亚新几内亚基那）</option>
+      <option value="php">PHP（菲律宾比索）</option>
+      <option value="pkr">PKR（巴基斯坦卢比）</option>
+      <option value="pln">PLN（波兰兹罗提）</option>
+      <option value="pyg">PYG（巴拉圭瓜拉尼）</option>
+      <option value="qar">QAR（卡塔尔里亚尔）</option>
+      <option value="ron">RON（罗马尼亚列伊）</option>
+      <option value="rsd">RSD（塞尔维亚第纳尔）</option>
+      <option value="rub">RUB（俄罗斯卢布）</option>
+      <option value="rwf">RWF（卢旺达法郎）</option>
+      <option value="sar">SAR（沙特里亚尔）</option>
+      <option value="sdg">SDG（苏丹镑）</option>
+      <option value="sek">SEK（瑞典克朗）</option>
+      <option value="sgd">SGD（新加坡元）</option>
+      <option value="shp">SHP（圣赫勒拿镑）</option>
+      <option value="sll">SLL（塞拉利昂利昂）</option>
+      <option value="sos">SOS（索马里先令）</option>
+      <option value="srd">SRD（苏里南元）</option>
+      <option value="syp">SYP（叙利亚镑）</option>
+      <option value="szl">SZL（斯威士里兰吉尼）</option>
+      <option value="thb">THB（泰铢）</option>
+      <option value="tjs">TJS（塔吉克斯坦索莫尼）</option>
+      <option value="tmt">TMT（土库曼斯坦马纳特）</option>
+      <option value="tnd">TND（突尼斯第纳尔）</option>
+      <option value="top">TOP（汤加潘加）</option>
+      <option value="try">TRY（土耳其里拉）</option>
+      <option value="ttd">TTD（特立尼达和多巴哥元）</option>
+      <option value="twd">TWD（新台币）</option>
+      <option value="tzs">TZS（坦桑尼亚先令）</option>
+      <option value="uah">UAH（乌克兰格里夫纳）</option>
+      <option value="ugx">UGX（乌干达先令）</option>
+      <option value="usd">USD（美元）</option>
+      <option value="uyu">UYU（乌拉圭比索）</option>
+      <option value="uzs">UZS（乌兹别克斯坦苏姆）</option>
+      <option value="vef">VEF（委内瑞拉玻利瓦尔）</option>
+      <option value="vnd">VND（越南盾）</option>
+      <option value="vuv">VUV（瓦努阿图瓦图）</option>
+      <option value="wst">WST（萨摩亚塔拉）</option>
+      <option value="xaf">XAF（中非法郎）</option>
+      <option value="xag">XAG（银）</option>
+      <option value="xau">XAU（黄金）</option>
+      <option value="xcd">XCD（东加勒比元）</option>
+      <option value="xdr">XDR（特别提款权）</option>
+      <option value="xof">XOF（西非法郎）</option>
+      <option value="xpd">XPD（钯金）</option>
+      <option value="xpf">XPF（太平洋法郎）</option>
+      <option value="xpt">XPT（铂金）</option>
+      <option value="zar">ZAR（南非兰特）</option>
+      <option value="zmw">ZMW（赞比亚克瓦查）</option>
+      <option value="zwl">ZWL（津巴布韦元）</option>
+  </select>
+</div>
+
+<ul id="result"></ul>
+
+<script>
+const $ = s => document.querySelector(s);
+
+async function loadRates(code) {
+  const codeUpper = code.toUpperCase();
+  const resultEl = $('#result');
+  resultEl.innerHTML = '加载中…';
+
+  const urls = [
+    `https://api.coinbase.com/v2/prices/${codeUpper}-USD/spot`,
+    `https://api.coinbase.com/v2/prices/${codeUpper}-USDT/spot`,
+    `https://api.coinbase.com/v2/prices/${codeUpper}-USDC/spot`
+  ];
+  const names = ['USD', 'USDT', 'USDC'];
+
+  try {
+    const dataList = await Promise.all(urls.map(u => fetch(u).then(r => r.json())));
+    resultEl.innerHTML = '';
+    dataList.forEach((d, i) => {
+      // 保留 5 位有效数字
+      const val = Number(d.data.amount).toPrecision(5);
+      const li = document.createElement('li');
+      li.textContent = `${codeUpper} → ${names[i]}：${val}`;
+      resultEl.appendChild(li);
+    });
+  } catch (err) {
+    resultEl.innerHTML = '<li>获取汇率失败，请稍后重试。</li>';
+  }
+}
+
+$('#currency').addEventListener('change', e => loadRates(e.target.value));
+loadRates('cny'); // 首次加载
+</script>
+</body>
+</html>
